@@ -1,4 +1,4 @@
-import { Heart, CreditCard, AlertCircle } from 'lucide-react';
+import { Heart, CreditCard } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function Donate() {

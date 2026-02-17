@@ -1,12 +1,10 @@
-
 import { BookOpen, Heart, Flame } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/router';
 
-interface HomeProps {
-  onNavigate: (page: string) => void;
-}
-
-export default function Home({ onNavigate }: HomeProps) {
+export default function Home() {
+  const router = useRouter();
+  const navigate = (path: string) => router.push(path).finally(() => window.scrollTo({ top: 0, behavior: 'smooth' }));
   return (
     <div className="min-h-screen">
       <motion.section
@@ -50,7 +48,7 @@ export default function Home({ onNavigate }: HomeProps) {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.97 }}
-                onClick={() => onNavigate('about')}
+                onClick={() => navigate('/about')}
                 className="px-8 py-4 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors"
               >
                 Learn More About Us
@@ -58,7 +56,7 @@ export default function Home({ onNavigate }: HomeProps) {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.97 }}
-                onClick={() => onNavigate('contact')}
+                onClick={() => navigate('/contact')}
                 className="px-8 py-4 bg-white text-blue-600 border-2 border-blue-600 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
               >
                 Contact Us
@@ -135,7 +133,7 @@ export default function Home({ onNavigate }: HomeProps) {
           <motion.button
             whileHover={{ scale: 1.07 }}
             whileTap={{ scale: 0.96 }}
-            onClick={() => onNavigate('contact')}
+            onClick={() => navigate('/contact')}
             className="px-8 py-4 bg-white text-blue-600 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
           >
             Get Connected

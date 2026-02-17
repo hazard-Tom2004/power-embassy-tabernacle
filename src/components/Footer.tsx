@@ -1,18 +1,19 @@
 import { Mail, Phone, MapPin } from 'lucide-react';
 import logo from '../assets/logo.png';
+import { useRouter } from 'next/router';
 
-interface FooterProps {
-  onNavigate: (page: string) => void;
-}
+export default function Footer() {
+  const router = useRouter();
+  const go = (path: string) => router.push(path).finally(() => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  const logoSrc = typeof logo === 'string' ? logo : (logo as { src?: string }).src || '';
 
-export default function Footer({ onNavigate }: FooterProps) {
   return (
     <footer className="bg-gray-900 text-gray-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <div className="flex items-center space-x-3 mb-4">
-              <img src={logo} alt="Power Embassy Tabernacle" className="h-8 w-8 object-contain" />
+              <div className="flex items-center space-x-3 mb-4">
+              <img src={logoSrc} alt="Power Embassy Tabernacle" className="h-8 w-8 object-contain" />
               <div>
                 <div className="text-lg font-bold text-white">Power Embassy Tabernacle</div>
                 <div className="text-xs text-gray-400">Power Outreach Ministries</div>
@@ -26,13 +27,20 @@ export default function Footer({ onNavigate }: FooterProps) {
           <div>
             <h3 className="text-white font-semibold mb-4">Quick Links</h3>
             <div className="space-y-2">
-              {['Home', 'About Us', 'Trustees', 'Contact', 'Donate', 'Church Standard'].map((item) => (
+                {[
+                { label: 'Home', path: '/' },
+                { label: 'About Us', path: '/About' },
+                { label: 'Trustees', path: '/Trustees' },
+                { label: 'Contact', path: '/Contact' },
+                { label: 'Donate', path: '/Donate' },
+                { label: 'Church Standard', path: '/Gallery' },
+              ].map((item) => (
                 <button
-                  key={item}
-                  onClick={() => onNavigate(item.toLowerCase().replace(' ', ''))}
+                  key={item.label}
+                  onClick={() => go(item.path)}
                   className="block text-sm hover:text-blue-400 transition-colors"
                 >
-                  {item}
+                  {item.label}
                 </button>
               ))}
             </div>

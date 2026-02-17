@@ -28,24 +28,25 @@ const FALLBACK_IMAGES: GalleryImage[] = [
 ];
 
 export async function getGalleryImages(): Promise<GalleryImage[]> {
-  const apiBase = (import.meta.env.VITE_API_URL as string) || `${location.protocol}//${location.hostname}:3002`;
-  const folder = (import.meta.env.VITE_GALLERY_FOLDER as string) || '';
-  
+  // Use Next API route; client-visible folder via NEXT_PUBLIC_GALLERY_FOLDER
+  const folder = (process.env.NEXT_PUBLIC_GALLERY_FOLDER as string) || (process.env.GALLERY_FOLDER as string) || '';
+
   try {
-    const url = new URL(`${apiBase}/api/gallery`);
+    const url = new URL('/api/gallery', location.origin);
     if (folder) url.searchParams.append('folder', folder);
-    
+
     const res = await fetch(url.toString());
     if (!res.ok) throw new Error('Gallery API returned ' + res.status);
     const data = await res.json();
-    
+
     if (!Array.isArray(data)) throw new Error('Invalid gallery response');
-    const images = data.map((d: any) => ({
-      id: d.id,
-      url: d.url,
-      alt: d.alt,
-      width: d.width,
-      height: d.height,
+    const arr = data as Array<Record<string, unknown>>;
+    const images: GalleryImage[] = arr.map((d) => ({
+      id: String(d.id),
+      url: String(d.url),
+      alt: typeof d.alt === 'string' ? d.alt : undefined,
+      width: typeof d.width === 'number' ? d.width : undefined,
+      height: typeof d.height === 'number' ? d.height : undefined,
     }));
     
     return images.length > 0 ? images : FALLBACK_IMAGES;
